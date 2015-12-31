@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+
+ <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+
+<style>
+
+.node {
+  stroke-width: 1.5px;
+}
+
+
+.y.axis line {
+  shape-rendering: auto;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #D2527F;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #D2527F;
+  stroke-width: 1.5px;
+
+}
+.logo
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+.slogan{
+  text-align: center;
+  font-family: Helvetica;
+  }
+body{
+  margin: 50px;
+}
+
+</style>
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+
+var n = 40,
+    random = d3.random.normal(0, 37);
+
+function chart(domain, interpolation, tick) {
+  var data = d3.range(n).map(random);
+  console.log(data)
+
+  var margin = {top: 6, right: 0, bottom: 6, left: 80},
+      width = $(window).width() - margin.right,
+      height = 120 - margin.top - margin.bottom;
+
+  var x = d3.scale.linear()
+      .domain(domain)
+      .range([0, width]);
+  var y = d3.scale.linear()
+      .domain([d3.min(data) - 5 , d3.max(data) + 5])
+      .range([height, 0]);
+
+  var line = d3.svg.line()
+      .interpolate(interpolation)
+      .x(function(d, i) { return x(i); })
+      .y(function(d, i) { return y(d); });
+
+  var svg = d3.select("body").append("p").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .style("margin-left", -margin.left + "px")
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.append("defs").append("clipPath")
+      .attr("id", "clip")
+    .append("rect")
+      .attr("width", width)
+      .attr("height", height);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(d3.svg.axis().scale(y).ticks(5).orient("left"));
+
+  var path = svg.append("g")
+      .attr("clip-path", "url(#clip)")
+    .append("path")
+      .datum(data)
+      .attr("class", "line")
+      .attr("d", line);
+
+  tick(path, line, data, x);
+}
+
+
+function chartStart() {
+
+var transition = d3.select({}).transition()
+    .duration(750)
+    .ease("linear");
+
+chart([0, n - 1], "linear", function tick(path, line, data, x) {
+  transition = transition.each(function() {
+
+    // push a new data point onto the back
+    data.push(random());
+
+    // redraw the line, and then slide it to the left
+    path
+        .attr("d", line)
+        .attr("transform", null)
+      .transition()
+        .attr("transform", "translate(" + x(-1) + ")");
+
+    // pop the old data point off the front
+    data.shift();
+
+  }).transition().each("start", function() { tick(path, line, data, x); });
+});
+
+}
+chartStart();
+chartStart();
+chartStart();
+
+
+
+
+// var width = $(window).width(),
+//     height =  $(window).height();
+
+
+// var fill = d3.scale.category10();
+
+// var nodes = [],
+//     foci = [{x: (width)/4, y:  100}, {x: (width*2)/4, y: (height*2)/4 + 100},
+//      {x: (width*3)/4 + 20, y: (height*3)/4 + 30}, {x: (width*3)/4 + 20, y: 100}];
+
+// var svg = d3.select("body").append("svg")
+//     .attr("width", width)
+//     .attr("height", height);
+
+// var force = d3.layout.force()
+//     .nodes(nodes)
+//     .links([])
+//     .gravity(0)
+//     .size([width, height])
+//     .on("tick", tick);
+
+// var node = svg.selectAll("circle");
+
+// function tick(e) {
+//   var k = .1 * e.alpha;
+
+//   // Push nodes toward their designated focus.
+//   nodes.forEach(function(o, i) {
+//     o.y += (foci[o.id].y - o.y) * k;
+//     o.x += (foci[o.id].x - o.x) * k;
+//   });
+
+//   node
+//       .attr("cx", function(d) { return d.x; })
+//       .attr("cy", function(d) { return d.y; });
+// }
+
+// setInterval(function(){
+//   nodes.push({id: ~~(Math.random() * foci.length)});
+//   force.start();
+
+//   node = node.data(nodes);
+
+//   node.enter().append("circle")
+//       .attr("class", "node")
+//       .attr("cx", function(d) { return d.x; })
+//       .attr("cy", function(d) { return d.y; })
+//       .attr("r", 8)
+//       .style("fill", function(d) { return fill(d.id); })
+//       .style("stroke", function(d) { return d3.rgb(fill(d.id)).darker(2); })
+//       .call(force.drag);
+// }, 500);
+
+</script>
+<body>
+  <img class="logo" src="basket_final.png" alt="Basket logo">
+  <h2 class="slogan"> A new way of investing is coming soon</h2>
+
+
+</body>
+<script>
+chartStart();
+chartStart();
+chartStart();
+</script>
