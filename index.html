@@ -61,9 +61,13 @@ function chart(domain, interpolation, tick) {
   var data = d3.range(n).map(random);
   console.log(data)
 
+  var width = window.innerWidth
+      || document.documentElement.clientWidth
+      || document.body.clientWidth;
+
   var margin = {top: 6, right: 0, bottom: 6, left: 80},
-      width = $(window).width() - margin.right,
-      height = 120 - margin.top - margin.bottom;
+      width = width - margin.right - margin.left,
+      height = 90 - margin.top - margin.bottom;
 
   var x = d3.scale.linear()
       .domain(domain)
@@ -94,7 +98,7 @@ function chart(domain, interpolation, tick) {
 
   svg.append("g")
       .attr("class", "y axis")
-      .call(d3.svg.axis().scale(y).ticks(5).orient("left").tickFormat( function(d) { return "$" + d } ));
+      .call(d3.svg.axis().scale(y).ticks(4).orient("left").tickFormat( function(d) { return "$" + d } ));
 
   var path = svg.append("g")
       .attr("clip-path", "url(#clip)")
@@ -195,8 +199,8 @@ chartStart();
 
 </script>
 <body>
-  <img class="logo" src="basket_final.png" alt="Basket logo">
-  <h2 class="slogan"> A new way of investing is coming soon</h2>
+  <img class="logo" src="basket_final.png" alt="Basket logo" width="600">
+  <h3 class="slogan"> A new way of investing is coming soon</h3>
 
 
 </body>
