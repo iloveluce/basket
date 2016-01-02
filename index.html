@@ -68,9 +68,11 @@ function chart(domain, interpolation, tick) {
   var x = d3.scale.linear()
       .domain(domain)
       .range([0, width]);
+  //var dollar = d3.format("$");
   var y = d3.scale.linear()
       .domain([d3.min(data) - 5 , d3.max(data) + 5])
-      .range([height, 0]);
+      .range([height, 0])
+
 
   var line = d3.svg.line()
       .interpolate(interpolation)
@@ -92,7 +94,7 @@ function chart(domain, interpolation, tick) {
 
   svg.append("g")
       .attr("class", "y axis")
-      .call(d3.svg.axis().scale(y).ticks(5).orient("left"));
+      .call(d3.svg.axis().scale(y).ticks(5).orient("left").tickFormat( function(d) { return "$" + d } ));
 
   var path = svg.append("g")
       .attr("clip-path", "url(#clip)")
